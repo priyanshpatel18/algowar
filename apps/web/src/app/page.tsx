@@ -1,57 +1,51 @@
 "use client"
 
+import ChallengeCard from '@/components/ChallengeCard';
+import GameCard from '@/components/GameCard';
+import Leaderboard from '@/components/Leaderboard';
+import { Button } from '@/components/ui/button';
 import { useRouter } from 'next/navigation';
-import { useRef } from 'react';
-
-const BACKEND_URL = 'http://localhost:3000';
 
 export default function Home() {
   const router = useRouter();
-  const guestName = useRef<HTMLInputElement>(null);
-
-  async function loginAsGuest() {
-    try {
-      const response = await fetch(`${BACKEND_URL}/auth/guest`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        credentials: 'include',
-        body: JSON.stringify({
-          name: guestName.current?.value || '',
-        }),
-      });
-
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
-      }
-
-      const user = await response.json();
-      if (user) {
-        router.push('/game');
-      }
-    } catch (error) {
-      console.error('Failed to login as guest:', error);
-    }
-  }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-blue-400 to-purple-500">
-      <div className="bg-white p-8 rounded-lg shadow-lg w-full md:w-1/2 lg:w-1/3">
-        <h1 className="text-3xl font-bold mb-6 text-center text-gray-800">Enter your name</h1>
-        <input
-          type="text"
-          ref={guestName}
-          placeholder="Username"
-          className="border px-4 py-2 rounded-md mb-4 w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
-        />
-        <button
-          onClick={loginAsGuest}
-          className="bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-md w-full transition duration-300 ease-in-out"
-        >
-          Login
-        </button>
-      </div>
+    <div className="min-h-screen flex flex-col">
+      <main className='flex-1 px-4 py-8 sm:px-6 lg:px-8'>
+        <section className="mb-8">
+
+          <div className='flex items-center justify-between'>
+            <h2 className="text-2xl font-bold">Ongoing Matches</h2>
+            {/* TODO: Show View All only if ongoing game > 3 */}
+            <Button variant="ghost">View All</Button>
+          </div>
+          <div className="mt-4 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            <GameCard />
+            <GameCard />
+            <GameCard />
+          </div>
+        </section>
+
+        <section className="mb-8">
+          <div className='flex items-center justify-between'>
+            <h2 className="text-2xl font-bold">Leaderboard</h2>
+            <Button variant="ghost">View All</Button>
+          </div>
+          <Leaderboard />
+        </section>
+
+        <section>
+          <div className='flex items-center justify-between'>
+            <h2 className="text-2xl font-bold">Upcoming Challenges</h2>
+            <Button variant="ghost">View All</Button>
+          </div>
+          <div className='mt-4 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3'>
+            <ChallengeCard title='Sorting Algorithms' subtitle='Implement efficient sorting algorithms' challenge='Implement a merge sort algorithm' />
+            <ChallengeCard title='Data Structures' subtitle='Implement common data structures' challenge='Implement a binary search tree' />
+            <ChallengeCard title='Dynamic Programming' subtitle='Solve dynamic programming problems' challenge='Implement a fibonacci sequence solver' />
+          </div>
+        </section>
+      </main>
     </div>
   )
 }

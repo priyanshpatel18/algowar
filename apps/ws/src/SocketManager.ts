@@ -40,20 +40,36 @@ class SocketManager {
       ...(this.roomUserMap.get(roomId) || []),
       user,
     ]);
-    this.userRoomMap.set(user.id, roomId);
+    this.userRoomMap.set(user.userId, roomId);
   }
 
   broadcast(roomId: string, message: string) {
     const users = this.roomUserMap.get(roomId);
-    console.log(users);
+
     if (!users) {
-      console.error("Room not found");
+      // Room Not Found
       return;
     }
 
     users.forEach((user) => {
       user.socket.send(message);
     });
+  }
+
+  removeUser(user: User) {
+    const roomId = this.userRoomMap.get(user.userId);
+    if (!roomId) {
+      // User not in any Room/Game
+      return;
+    }
+
+    const room = this.roomUserMap.get(roomId) || [];
+    const remainingUsers = room.filter(u => u.userId !== user.userId);
+    this.roomUserMap.set(roomId, remainingUsers);
+    if (this.roomUserMap.get(roomId)?.length === 0) {
+      this.roomUserMap.delete(roomId);
+    }
+    this.userRoomMap.delete(user.userId);
   }
 }
 

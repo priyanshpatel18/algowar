@@ -6,7 +6,9 @@
   },
   "scripts": {
     "db:generate": "prisma generate",
+    "db:migrate": "prisma migrate deploy",
     "db:push": "prisma db push --skip-generate",
+    "studio": "npx prisma studio",
     "build": "tsc"
   },
   "devDependencies": {

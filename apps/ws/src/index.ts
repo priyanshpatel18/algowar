@@ -2,7 +2,7 @@ import url from "url";
 import { WebSocket, WebSocketServer } from "ws";
 import { GameManager } from "./GameManager";
 import { extractAuthUser } from "./utils/auth";
-import { CONNECTED } from "@repo/messages";
+import { CONNECTED, HEARTBEAT } from "@repo/messages";
 
 const wss = new WebSocketServer({ port: 8080 });
 const gameManager = new GameManager();
@@ -21,6 +21,15 @@ wss.on("connection", (ws: WebSocket, req: Request) => {
   const user = extractAuthUser(token, ws);
   gameManager.addUser(user);
   ws.send(JSON.stringify({ type: CONNECTED, user: user.id }));
+
+  // Heartbeat Algorithm
+  ws.on("message", (data) => {
+    const message = JSON.parse(data.toString());
+
+    if (message.type === HEARTBEAT) {
+      ws.send(JSON.stringify({ type: HEARTBEAT }));
+    }
+  });
 
   ws.on("close", () => {
     gameManager.removeUser(ws);

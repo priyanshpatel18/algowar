@@ -11,36 +11,46 @@ model User {
   id        String        @id @default(uuid())
   email     String        @unique
   name      String
+  // password  String?
+  image     String?
+  rating    Int           @default(1200)
   provider  AUTH_PROVIDER @default(GUEST)
-  games     Game[]
   createdAt DateTime      @default(now())
+  games     Game[]
+  // lastLogin DateTime?
+
+  @@index([rating])
 }
 
 enum AUTH_PROVIDER {
   GUEST
-  // EMAIL
-  // GOOGLE
-  // GITHUB
+  GOOGLE
+  GITHUB
 }
 
 model Game {
-  id        Int         @id @default(autoincrement())
-  status    GAME_STATUS @default(PENDING)
-  result    GAME_RESULT
-  users     User[]
-  startTime DateTime    @default(now())
+  id          String      @id @default(uuid())
+  status      GAME_STATUS @default(IN_PROGRESS)
+  result      GAME_RESULT @default(DRAW)
+  players     User[]
+  startTime   DateTime    @default(now())
+  timeOutTime DateTime?
+  endTime     DateTime?
+
+  @@index([status, result])
 }
 
 enum GAME_RESULT {
-  PLAYER_ONE
-  PLAYER_TWO
+  PLAYER_ONE_WINS
+  PLAYER_TWO_WINS
   DRAW
 }
 
 enum GAME_STATUS {
-  PENDING
+  WAITING_FOR_OPPONENT
   IN_PROGRESS
   COMPLETED
-  PLAYER_DISCONNECTED
+  ABANDONED
   TIMEOUT
+  PLAYER_EXIT
 }

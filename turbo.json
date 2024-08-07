@@ -13,6 +13,13 @@
     "dev": {
       "cache": false,
       "persistent": true
+    },
+    "db:generate": {
+      "outputs": ["packages/database/prisma/client"]
+    },
+    "db:migrate": {
+      "dependsOn": ["db:generate"],
+      "outputs": []
     }
   }
 }

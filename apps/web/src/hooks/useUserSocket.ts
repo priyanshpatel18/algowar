@@ -5,7 +5,7 @@ import { useUser } from "./useUser";
 export default function useUserSocket() {
   const { user, loading } = useUser();
   const [token, setToken] = useState<string | null>(null);
-  const socket = useSocket({ token });
+  const { socket, connectionType } = useSocket({ token });
 
   useEffect(() => {
     if (user && !loading) {
@@ -13,5 +13,5 @@ export default function useUserSocket() {
     }
   }, [loading, user]);
 
-  return { user, socket };
+  return { user, socket, connectionType };
 }

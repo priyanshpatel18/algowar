@@ -1,4 +1,12 @@
 export const CONNECTED = 'CONNECTED';
 export const INIT_GAME = 'INIT_GAME';
 export const GAME_ADDED = 'GAME_ADDED';
-export const START_GAME = 'START_GAME';
+export const GAME_IN_PROGRESS = 'GAME_IN_PROGRESS';
+export const GAME_ALERT = 'GAME_ALERT';
+export const PLAYER_DISCONNECTED = 'PLAYER_DISCONNECTED';
+export const PLAYER_RECONNECTED = 'PLAYER_RECONNECTED';
+export const EXIT_GAME = 'EXIT_GAME';
+export const GAME_ENDED = 'GAME_ENDED';
+export const RECONNECTED = 'RECONNECTED';
+
+export const HEARTBEAT = 'HEARTBEAT';
